@@ -334,15 +334,17 @@ impl Parameters for MainNetwork {
         NetworkType::Main
     }
 
+    //CHANGED TO CUSTOM HEIGHTS FOR USE WITH PRIVATE TESTNETS.
+    //THE CHOSEN VALUES ARE ARBITRARY.
     fn activation_height(&self, nu: NetworkUpgrade) -> Option<BlockHeight> {
         match nu {
-            NetworkUpgrade::Overwinter => Some(BlockHeight(347_500)),
-            NetworkUpgrade::Sapling => Some(BlockHeight(419_200)),
-            NetworkUpgrade::Blossom => Some(BlockHeight(653_600)),
-            NetworkUpgrade::Heartwood => Some(BlockHeight(903_000)),
-            NetworkUpgrade::Canopy => Some(BlockHeight(1_046_400)),
-            NetworkUpgrade::Nu5 => Some(BlockHeight(1_687_104)),
-            NetworkUpgrade::Nu6 => Some(BlockHeight(2_726_400)),
+            NetworkUpgrade::Overwinter => Some(BlockHeight(1)),
+            NetworkUpgrade::Sapling => Some(BlockHeight(6)),
+            NetworkUpgrade::Blossom => Some(BlockHeight(11)),
+            NetworkUpgrade::Heartwood => Some(BlockHeight(16)),
+            NetworkUpgrade::Canopy => Some(BlockHeight(21)),
+            NetworkUpgrade::Nu5 => Some(BlockHeight(126)),
+            NetworkUpgrade::Nu6 => Some(BlockHeight(331)),
             #[cfg(zcash_unstable = "zfuture")]
             NetworkUpgrade::ZFuture => None,
         }

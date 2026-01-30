@@ -467,7 +467,7 @@
 <a href=#467 id=467 data-nosnippet>467</a>            NetworkUpgrade::Nu6 =&gt; <span class="prelude-val">Some</span>(BlockHeight(<span class="number">2_976_000</span>)),
 <a href=#468 id=468 data-nosnippet>468</a>            NetworkUpgrade::Nu6_1 =&gt; <span class="prelude-val">Some</span>(BlockHeight(<span class="number">3_536_500</span>)),
 <a href=#469 id=469 data-nosnippet>469</a>            <span class="attr">#[cfg(zcash_unstable = <span class="string">"nu7"</span>)]
-<a href=#470 id=470 data-nosnippet>470</a>            </span>NetworkUpgrade::Nu7 =&gt; <span class="prelude-val">None</span>,
+<a href=#470 id=470 data-nosnippet>470</a>            </span>NetworkUpgrade::Nu7 =&gt; <span class="prelude-val">Some</span>(BlockHeight(<span class="number">3_815_600</span>)),
 <a href=#471 id=471 data-nosnippet>471</a>            <span class="attr">#[cfg(zcash_unstable = <span class="string">"zfuture"</span>)]
 <a href=#472 id=472 data-nosnippet>472</a>            </span>NetworkUpgrade::ZFuture =&gt; <span class="prelude-val">None</span>,
 <a href=#473 id=473 data-nosnippet>473</a>        }
@@ -677,7 +677,7 @@
 <a href=#677 id=677 data-nosnippet>677</a>            <span class="number">0xc8e7_1055 </span>=&gt; <span class="prelude-val">Ok</span>(BranchId::Nu6),
 <a href=#678 id=678 data-nosnippet>678</a>            <span class="number">0x4dec_4df0 </span>=&gt; <span class="prelude-val">Ok</span>(BranchId::Nu6_1),
 <a href=#679 id=679 data-nosnippet>679</a>            <span class="attr">#[cfg(zcash_unstable = <span class="string">"nu7"</span>)]
-<a href=#680 id=680 data-nosnippet>680</a>            </span><span class="number">0xffff_ffff </span>=&gt; <span class="prelude-val">Ok</span>(BranchId::Nu7),
+<a href=#680 id=680 data-nosnippet>680</a>            </span><span class="number">0x0000_beef </span>=&gt; <span class="prelude-val">Ok</span>(BranchId::Nu7),
 <a href=#681 id=681 data-nosnippet>681</a>            <span class="attr">#[cfg(zcash_unstable = <span class="string">"zfuture"</span>)]
 <a href=#682 id=682 data-nosnippet>682</a>            </span><span class="number">0xffff_ffff </span>=&gt; <span class="prelude-val">Ok</span>(BranchId::ZFuture),
 <a href=#683 id=683 data-nosnippet>683</a>            <span class="kw">_ </span>=&gt; <span class="prelude-val">Err</span>(<span class="string">"Unknown consensus branch ID"</span>),
@@ -698,7 +698,7 @@
 <a href=#698 id=698 data-nosnippet>698</a>            BranchId::Nu6 =&gt; <span class="number">0xc8e7_1055</span>,
 <a href=#699 id=699 data-nosnippet>699</a>            BranchId::Nu6_1 =&gt; <span class="number">0x4dec_4df0</span>,
 <a href=#700 id=700 data-nosnippet>700</a>            <span class="attr">#[cfg(zcash_unstable = <span class="string">"nu7"</span>)]
-<a href=#701 id=701 data-nosnippet>701</a>            </span>BranchId::Nu7 =&gt; <span class="number">0xffff_ffff</span>,
+<a href=#701 id=701 data-nosnippet>701</a>            </span>BranchId::Nu7 =&gt; <span class="number">0x0000_beef</span>,
 <a href=#702 id=702 data-nosnippet>702</a>            <span class="attr">#[cfg(zcash_unstable = <span class="string">"zfuture"</span>)]
 <a href=#703 id=703 data-nosnippet>703</a>            </span>BranchId::ZFuture =&gt; <span class="number">0xffff_ffff</span>,
 <a href=#704 id=704 data-nosnippet>704</a>        }
@@ -770,160 +770,168 @@
 <a href=#770 id=770 data-nosnippet>770</a>            BranchId::Nu6 =&gt; params
 <a href=#771 id=771 data-nosnippet>771</a>                .activation_height(NetworkUpgrade::Nu6)
 <a href=#772 id=772 data-nosnippet>772</a>                .map(|lower| (lower, params.activation_height(NetworkUpgrade::Nu6_1))),
-<a href=#773 id=773 data-nosnippet>773</a>            BranchId::Nu6_1 =&gt; params
-<a href=#774 id=774 data-nosnippet>774</a>                .activation_height(NetworkUpgrade::Nu6_1)
-<a href=#775 id=775 data-nosnippet>775</a>                .map(|lower| {
-<a href=#776 id=776 data-nosnippet>776</a>                    <span class="attr">#[cfg(zcash_unstable = <span class="string">"nu7"</span>)]
-<a href=#777 id=777 data-nosnippet>777</a>                    </span><span class="kw">let </span>upper = params.activation_height(NetworkUpgrade::Nu7);
-<a href=#778 id=778 data-nosnippet>778</a>                    <span class="attr">#[cfg(zcash_unstable = <span class="string">"zfuture"</span>)]
-<a href=#779 id=779 data-nosnippet>779</a>                    </span><span class="kw">let </span>upper = params.activation_height(NetworkUpgrade::ZFuture);
-<a href=#780 id=780 data-nosnippet>780</a>                    <span class="attr">#[cfg(not(any(zcash_unstable = <span class="string">"nu7"</span>, zcash_unstable = <span class="string">"zfuture"</span>)))]
-<a href=#781 id=781 data-nosnippet>781</a>                    </span><span class="kw">let </span>upper = <span class="prelude-val">None</span>;
-<a href=#782 id=782 data-nosnippet>782</a>                    (lower, upper)
-<a href=#783 id=783 data-nosnippet>783</a>                }),
-<a href=#784 id=784 data-nosnippet>784</a>            <span class="attr">#[cfg(zcash_unstable = <span class="string">"nu7"</span>)]
-<a href=#785 id=785 data-nosnippet>785</a>            </span>BranchId::Nu7 =&gt; params
-<a href=#786 id=786 data-nosnippet>786</a>                .activation_height(NetworkUpgrade::Nu7)
-<a href=#787 id=787 data-nosnippet>787</a>                .map(|lower| (lower, <span class="prelude-val">None</span>)),
-<a href=#788 id=788 data-nosnippet>788</a>            <span class="attr">#[cfg(zcash_unstable = <span class="string">"zfuture"</span>)]
-<a href=#789 id=789 data-nosnippet>789</a>            </span>BranchId::ZFuture =&gt; params
-<a href=#790 id=790 data-nosnippet>790</a>                .activation_height(NetworkUpgrade::ZFuture)
-<a href=#791 id=791 data-nosnippet>791</a>                .map(|lower| (lower, <span class="prelude-val">None</span>)),
-<a href=#792 id=792 data-nosnippet>792</a>        }
-<a href=#793 id=793 data-nosnippet>793</a>    }
-<a href=#794 id=794 data-nosnippet>794</a>
-<a href=#795 id=795 data-nosnippet>795</a>    <span class="kw">pub fn </span>sprout_uses_groth_proofs(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
-<a href=#796 id=796 data-nosnippet>796</a>        !<span class="macro">matches!</span>(<span class="self">self</span>, BranchId::Sprout | BranchId::Overwinter)
-<a href=#797 id=797 data-nosnippet>797</a>    }
-<a href=#798 id=798 data-nosnippet>798</a>}
-<a href=#799 id=799 data-nosnippet>799</a>
-<a href=#800 id=800 data-nosnippet>800</a><span class="attr">#[cfg(any(test, feature = <span class="string">"test-dependencies"</span>))]
-<a href=#801 id=801 data-nosnippet>801</a></span><span class="kw">pub mod </span>testing {
-<a href=#802 id=802 data-nosnippet>802</a>    <span class="kw">use </span>proptest::sample::select;
-<a href=#803 id=803 data-nosnippet>803</a>    <span class="kw">use </span>proptest::strategy::{Just, Strategy};
-<a href=#804 id=804 data-nosnippet>804</a>
-<a href=#805 id=805 data-nosnippet>805</a>    <span class="kw">use </span>super::{BlockHeight, BranchId, Parameters};
-<a href=#806 id=806 data-nosnippet>806</a>
-<a href=#807 id=807 data-nosnippet>807</a>    <span class="kw">pub fn </span>arb_branch_id() -&gt; <span class="kw">impl </span>Strategy&lt;Value = BranchId&gt; {
-<a href=#808 id=808 data-nosnippet>808</a>        select(<span class="macro">vec!</span>[
-<a href=#809 id=809 data-nosnippet>809</a>            BranchId::Sprout,
-<a href=#810 id=810 data-nosnippet>810</a>            BranchId::Overwinter,
-<a href=#811 id=811 data-nosnippet>811</a>            BranchId::Sapling,
-<a href=#812 id=812 data-nosnippet>812</a>            BranchId::Blossom,
-<a href=#813 id=813 data-nosnippet>813</a>            BranchId::Heartwood,
-<a href=#814 id=814 data-nosnippet>814</a>            BranchId::Canopy,
-<a href=#815 id=815 data-nosnippet>815</a>            BranchId::Nu5,
-<a href=#816 id=816 data-nosnippet>816</a>            BranchId::Nu6,
-<a href=#817 id=817 data-nosnippet>817</a>            BranchId::Nu6_1,
-<a href=#818 id=818 data-nosnippet>818</a>            <span class="attr">#[cfg(zcash_unstable = <span class="string">"nu7"</span>)]
-<a href=#819 id=819 data-nosnippet>819</a>            </span>BranchId::Nu7,
-<a href=#820 id=820 data-nosnippet>820</a>            <span class="attr">#[cfg(zcash_unstable = <span class="string">"zfuture"</span>)]
-<a href=#821 id=821 data-nosnippet>821</a>            </span>BranchId::ZFuture,
-<a href=#822 id=822 data-nosnippet>822</a>        ])
-<a href=#823 id=823 data-nosnippet>823</a>    }
-<a href=#824 id=824 data-nosnippet>824</a>
-<a href=#825 id=825 data-nosnippet>825</a>    <span class="kw">pub fn </span>arb_height&lt;P: Parameters&gt;(
-<a href=#826 id=826 data-nosnippet>826</a>        branch_id: BranchId,
-<a href=#827 id=827 data-nosnippet>827</a>        params: <span class="kw-2">&amp;</span>P,
-<a href=#828 id=828 data-nosnippet>828</a>    ) -&gt; <span class="kw">impl </span>Strategy&lt;Value = <span class="prelude-ty">Option</span>&lt;BlockHeight&gt;&gt; {
-<a href=#829 id=829 data-nosnippet>829</a>        branch_id
-<a href=#830 id=830 data-nosnippet>830</a>            .height_bounds(params)
-<a href=#831 id=831 data-nosnippet>831</a>            .map_or(Strategy::boxed(Just(<span class="prelude-val">None</span>)), |(lower, upper)| {
-<a href=#832 id=832 data-nosnippet>832</a>                Strategy::boxed(
-<a href=#833 id=833 data-nosnippet>833</a>                    (lower.<span class="number">0</span>..upper.map_or(u32::MAX, |u| u.<span class="number">0</span>)).prop_map(|h| <span class="prelude-val">Some</span>(BlockHeight(h))),
-<a href=#834 id=834 data-nosnippet>834</a>                )
-<a href=#835 id=835 data-nosnippet>835</a>            })
-<a href=#836 id=836 data-nosnippet>836</a>    }
-<a href=#837 id=837 data-nosnippet>837</a>
-<a href=#838 id=838 data-nosnippet>838</a>    <span class="attr">#[cfg(feature = <span class="string">"test-dependencies"</span>)]
-<a href=#839 id=839 data-nosnippet>839</a>    </span><span class="kw">impl </span>incrementalmerkletree_testing::TestCheckpoint <span class="kw">for </span>BlockHeight {
-<a href=#840 id=840 data-nosnippet>840</a>        <span class="kw">fn </span>from_u64(value: u64) -&gt; <span class="self">Self </span>{
-<a href=#841 id=841 data-nosnippet>841</a>            BlockHeight(u32::try_from(value).expect(<span class="string">"Test checkpoint ids do not exceed 32 bits"</span>))
-<a href=#842 id=842 data-nosnippet>842</a>        }
-<a href=#843 id=843 data-nosnippet>843</a>    }
-<a href=#844 id=844 data-nosnippet>844</a>}
+<a href=#773 id=773 data-nosnippet>773</a>            
+<a href=#774 id=774 data-nosnippet>774</a>                <span class="attr">#[cfg(zcash_unstable = <span class="string">"nu7"</span>)]
+<a href=#775 id=775 data-nosnippet>775</a>            </span>BranchId::Nu6_1 =&gt; params
+<a href=#776 id=776 data-nosnippet>776</a>                .activation_height(NetworkUpgrade::Nu6_1)
+<a href=#777 id=777 data-nosnippet>777</a>                .map(|lower| (lower, params.activation_height(NetworkUpgrade::Nu7))),
+<a href=#778 id=778 data-nosnippet>778</a>                
+<a href=#779 id=779 data-nosnippet>779</a>                <span class="comment">//I don't know but it complained if this line ain't here
+<a href=#780 id=780 data-nosnippet>780</a>            </span><span class="kw-2">&amp;</span>BranchId::Nu6_1 =&gt; <span class="macro">todo!</span>(),
+<a href=#781 id=781 data-nosnippet>781</a>            
+<a href=#782 id=782 data-nosnippet>782</a>                <span class="attr">#[cfg(zcash_unstable = <span class="string">"nu7"</span>)]
+<a href=#783 id=783 data-nosnippet>783</a>            </span>BranchId::Nu7 =&gt; params
+<a href=#784 id=784 data-nosnippet>784</a>                .activation_height(NetworkUpgrade::Nu7)
+<a href=#785 id=785 data-nosnippet>785</a>                .map(|lower| {
+<a href=#786 id=786 data-nosnippet>786</a>                    <span class="attr">#[cfg(zcash_unstable = <span class="string">"nu7"</span>)]
+<a href=#787 id=787 data-nosnippet>787</a>                    </span><span class="kw">let </span>upper = params.activation_height(NetworkUpgrade::Nu7);
+<a href=#788 id=788 data-nosnippet>788</a>                    <span class="attr">#[cfg(zcash_unstable = <span class="string">"zfuture"</span>)]
+<a href=#789 id=789 data-nosnippet>789</a>                    </span><span class="kw">let </span>upper = params.activation_height(NetworkUpgrade::ZFuture);
+<a href=#790 id=790 data-nosnippet>790</a>                    <span class="attr">#[cfg(not(any(zcash_unstable = <span class="string">"nu7"</span>, zcash_unstable = <span class="string">"zfuture"</span>)))]
+<a href=#791 id=791 data-nosnippet>791</a>                    </span><span class="kw">let </span>upper = <span class="prelude-val">None</span>;
+<a href=#792 id=792 data-nosnippet>792</a>                    (lower, upper)
+<a href=#793 id=793 data-nosnippet>793</a>                }),
+<a href=#794 id=794 data-nosnippet>794</a>            
+<a href=#795 id=795 data-nosnippet>795</a>         
+<a href=#796 id=796 data-nosnippet>796</a>            <span class="attr">#[cfg(zcash_unstable = <span class="string">"zfuture"</span>)]
+<a href=#797 id=797 data-nosnippet>797</a>            </span>BranchId::ZFuture =&gt; params
+<a href=#798 id=798 data-nosnippet>798</a>                .activation_height(NetworkUpgrade::ZFuture)
+<a href=#799 id=799 data-nosnippet>799</a>                .map(|lower| (lower, <span class="prelude-val">None</span>)),
+<a href=#800 id=800 data-nosnippet>800</a>        }
+<a href=#801 id=801 data-nosnippet>801</a>    }
+<a href=#802 id=802 data-nosnippet>802</a>
+<a href=#803 id=803 data-nosnippet>803</a>    <span class="kw">pub fn </span>sprout_uses_groth_proofs(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+<a href=#804 id=804 data-nosnippet>804</a>        !<span class="macro">matches!</span>(<span class="self">self</span>, BranchId::Sprout | BranchId::Overwinter)
+<a href=#805 id=805 data-nosnippet>805</a>    }
+<a href=#806 id=806 data-nosnippet>806</a>}
+<a href=#807 id=807 data-nosnippet>807</a>
+<a href=#808 id=808 data-nosnippet>808</a><span class="attr">#[cfg(any(test, feature = <span class="string">"test-dependencies"</span>))]
+<a href=#809 id=809 data-nosnippet>809</a></span><span class="kw">pub mod </span>testing {
+<a href=#810 id=810 data-nosnippet>810</a>    <span class="kw">use </span>proptest::sample::select;
+<a href=#811 id=811 data-nosnippet>811</a>    <span class="kw">use </span>proptest::strategy::{Just, Strategy};
+<a href=#812 id=812 data-nosnippet>812</a>
+<a href=#813 id=813 data-nosnippet>813</a>    <span class="kw">use </span>super::{BlockHeight, BranchId, Parameters};
+<a href=#814 id=814 data-nosnippet>814</a>
+<a href=#815 id=815 data-nosnippet>815</a>    <span class="kw">pub fn </span>arb_branch_id() -&gt; <span class="kw">impl </span>Strategy&lt;Value = BranchId&gt; {
+<a href=#816 id=816 data-nosnippet>816</a>        select(<span class="macro">vec!</span>[
+<a href=#817 id=817 data-nosnippet>817</a>            BranchId::Sprout,
+<a href=#818 id=818 data-nosnippet>818</a>            BranchId::Overwinter,
+<a href=#819 id=819 data-nosnippet>819</a>            BranchId::Sapling,
+<a href=#820 id=820 data-nosnippet>820</a>            BranchId::Blossom,
+<a href=#821 id=821 data-nosnippet>821</a>            BranchId::Heartwood,
+<a href=#822 id=822 data-nosnippet>822</a>            BranchId::Canopy,
+<a href=#823 id=823 data-nosnippet>823</a>            BranchId::Nu5,
+<a href=#824 id=824 data-nosnippet>824</a>            BranchId::Nu6,
+<a href=#825 id=825 data-nosnippet>825</a>            BranchId::Nu6_1,
+<a href=#826 id=826 data-nosnippet>826</a>            <span class="attr">#[cfg(zcash_unstable = <span class="string">"nu7"</span>)]
+<a href=#827 id=827 data-nosnippet>827</a>            </span>BranchId::Nu7,
+<a href=#828 id=828 data-nosnippet>828</a>            <span class="attr">#[cfg(zcash_unstable = <span class="string">"zfuture"</span>)]
+<a href=#829 id=829 data-nosnippet>829</a>            </span>BranchId::ZFuture,
+<a href=#830 id=830 data-nosnippet>830</a>        ])
+<a href=#831 id=831 data-nosnippet>831</a>    }
+<a href=#832 id=832 data-nosnippet>832</a>
+<a href=#833 id=833 data-nosnippet>833</a>    <span class="kw">pub fn </span>arb_height&lt;P: Parameters&gt;(
+<a href=#834 id=834 data-nosnippet>834</a>        branch_id: BranchId,
+<a href=#835 id=835 data-nosnippet>835</a>        params: <span class="kw-2">&amp;</span>P,
+<a href=#836 id=836 data-nosnippet>836</a>    ) -&gt; <span class="kw">impl </span>Strategy&lt;Value = <span class="prelude-ty">Option</span>&lt;BlockHeight&gt;&gt; {
+<a href=#837 id=837 data-nosnippet>837</a>        branch_id
+<a href=#838 id=838 data-nosnippet>838</a>            .height_bounds(params)
+<a href=#839 id=839 data-nosnippet>839</a>            .map_or(Strategy::boxed(Just(<span class="prelude-val">None</span>)), |(lower, upper)| {
+<a href=#840 id=840 data-nosnippet>840</a>                Strategy::boxed(
+<a href=#841 id=841 data-nosnippet>841</a>                    (lower.<span class="number">0</span>..upper.map_or(u32::MAX, |u| u.<span class="number">0</span>)).prop_map(|h| <span class="prelude-val">Some</span>(BlockHeight(h))),
+<a href=#842 id=842 data-nosnippet>842</a>                )
+<a href=#843 id=843 data-nosnippet>843</a>            })
+<a href=#844 id=844 data-nosnippet>844</a>    }
 <a href=#845 id=845 data-nosnippet>845</a>
-<a href=#846 id=846 data-nosnippet>846</a><span class="attr">#[cfg(test)]
-<a href=#847 id=847 data-nosnippet>847</a></span><span class="kw">mod </span>tests {
-<a href=#848 id=848 data-nosnippet>848</a>    <span class="kw">use </span>super::{
-<a href=#849 id=849 data-nosnippet>849</a>        BlockHeight, BranchId, NetworkUpgrade, Parameters, MAIN_NETWORK, UPGRADES_IN_ORDER,
-<a href=#850 id=850 data-nosnippet>850</a>    };
-<a href=#851 id=851 data-nosnippet>851</a>
-<a href=#852 id=852 data-nosnippet>852</a>    <span class="attr">#[test]
-<a href=#853 id=853 data-nosnippet>853</a>    </span><span class="kw">fn </span>nu_ordering() {
-<a href=#854 id=854 data-nosnippet>854</a>        <span class="kw">for </span>i <span class="kw">in </span><span class="number">1</span>..UPGRADES_IN_ORDER.len() {
-<a href=#855 id=855 data-nosnippet>855</a>            <span class="kw">let </span>nu_a = UPGRADES_IN_ORDER[i - <span class="number">1</span>];
-<a href=#856 id=856 data-nosnippet>856</a>            <span class="kw">let </span>nu_b = UPGRADES_IN_ORDER[i];
-<a href=#857 id=857 data-nosnippet>857</a>            <span class="kw">match </span>(
-<a href=#858 id=858 data-nosnippet>858</a>                MAIN_NETWORK.activation_height(nu_a),
-<a href=#859 id=859 data-nosnippet>859</a>                MAIN_NETWORK.activation_height(nu_b),
-<a href=#860 id=860 data-nosnippet>860</a>            ) {
-<a href=#861 id=861 data-nosnippet>861</a>                (<span class="prelude-val">Some</span>(a), <span class="prelude-val">Some</span>(b)) <span class="kw">if </span>a &lt; b =&gt; (),
-<a href=#862 id=862 data-nosnippet>862</a>                (<span class="prelude-val">Some</span>(<span class="kw">_</span>), <span class="prelude-val">None</span>) =&gt; (),
-<a href=#863 id=863 data-nosnippet>863</a>                (<span class="prelude-val">None</span>, <span class="prelude-val">None</span>) =&gt; (),
-<a href=#864 id=864 data-nosnippet>864</a>                <span class="kw">_ </span>=&gt; <span class="macro">panic!</span>(
-<a href=#865 id=865 data-nosnippet>865</a>                    <span class="string">"{} should not be before {} in UPGRADES_IN_ORDER"</span>,
-<a href=#866 id=866 data-nosnippet>866</a>                    nu_a, nu_b
-<a href=#867 id=867 data-nosnippet>867</a>                ),
-<a href=#868 id=868 data-nosnippet>868</a>            }
-<a href=#869 id=869 data-nosnippet>869</a>        }
-<a href=#870 id=870 data-nosnippet>870</a>    }
-<a href=#871 id=871 data-nosnippet>871</a>
-<a href=#872 id=872 data-nosnippet>872</a>    <span class="attr">#[test]
-<a href=#873 id=873 data-nosnippet>873</a>    </span><span class="kw">fn </span>nu_is_active() {
-<a href=#874 id=874 data-nosnippet>874</a>        <span class="macro">assert!</span>(!MAIN_NETWORK.is_nu_active(NetworkUpgrade::Overwinter, BlockHeight(<span class="number">0</span>)));
-<a href=#875 id=875 data-nosnippet>875</a>        <span class="macro">assert!</span>(!MAIN_NETWORK.is_nu_active(NetworkUpgrade::Overwinter, BlockHeight(<span class="number">347_499</span>)));
-<a href=#876 id=876 data-nosnippet>876</a>        <span class="macro">assert!</span>(MAIN_NETWORK.is_nu_active(NetworkUpgrade::Overwinter, BlockHeight(<span class="number">347_500</span>)));
-<a href=#877 id=877 data-nosnippet>877</a>    }
-<a href=#878 id=878 data-nosnippet>878</a>
-<a href=#879 id=879 data-nosnippet>879</a>    <span class="attr">#[test]
-<a href=#880 id=880 data-nosnippet>880</a>    </span><span class="kw">fn </span>branch_id_from_u32() {
-<a href=#881 id=881 data-nosnippet>881</a>        <span class="macro">assert_eq!</span>(BranchId::try_from(<span class="number">0</span>), <span class="prelude-val">Ok</span>(BranchId::Sprout));
-<a href=#882 id=882 data-nosnippet>882</a>        <span class="macro">assert!</span>(BranchId::try_from(<span class="number">1</span>).is_err());
-<a href=#883 id=883 data-nosnippet>883</a>    }
-<a href=#884 id=884 data-nosnippet>884</a>
-<a href=#885 id=885 data-nosnippet>885</a>    <span class="attr">#[test]
-<a href=#886 id=886 data-nosnippet>886</a>    </span><span class="kw">fn </span>branch_id_for_height() {
-<a href=#887 id=887 data-nosnippet>887</a>        <span class="macro">assert_eq!</span>(
-<a href=#888 id=888 data-nosnippet>888</a>            BranchId::for_height(<span class="kw-2">&amp;</span>MAIN_NETWORK, BlockHeight(<span class="number">0</span>)),
-<a href=#889 id=889 data-nosnippet>889</a>            BranchId::Sprout,
-<a href=#890 id=890 data-nosnippet>890</a>        );
-<a href=#891 id=891 data-nosnippet>891</a>        <span class="macro">assert_eq!</span>(
-<a href=#892 id=892 data-nosnippet>892</a>            BranchId::for_height(<span class="kw-2">&amp;</span>MAIN_NETWORK, BlockHeight(<span class="number">419_199</span>)),
-<a href=#893 id=893 data-nosnippet>893</a>            BranchId::Overwinter,
-<a href=#894 id=894 data-nosnippet>894</a>        );
+<a href=#846 id=846 data-nosnippet>846</a>    <span class="attr">#[cfg(feature = <span class="string">"test-dependencies"</span>)]
+<a href=#847 id=847 data-nosnippet>847</a>    </span><span class="kw">impl </span>incrementalmerkletree_testing::TestCheckpoint <span class="kw">for </span>BlockHeight {
+<a href=#848 id=848 data-nosnippet>848</a>        <span class="kw">fn </span>from_u64(value: u64) -&gt; <span class="self">Self </span>{
+<a href=#849 id=849 data-nosnippet>849</a>            BlockHeight(u32::try_from(value).expect(<span class="string">"Test checkpoint ids do not exceed 32 bits"</span>))
+<a href=#850 id=850 data-nosnippet>850</a>        }
+<a href=#851 id=851 data-nosnippet>851</a>    }
+<a href=#852 id=852 data-nosnippet>852</a>}
+<a href=#853 id=853 data-nosnippet>853</a>
+<a href=#854 id=854 data-nosnippet>854</a><span class="attr">#[cfg(test)]
+<a href=#855 id=855 data-nosnippet>855</a></span><span class="kw">mod </span>tests {
+<a href=#856 id=856 data-nosnippet>856</a>    <span class="kw">use </span>super::{
+<a href=#857 id=857 data-nosnippet>857</a>        BlockHeight, BranchId, NetworkUpgrade, Parameters, MAIN_NETWORK, UPGRADES_IN_ORDER,
+<a href=#858 id=858 data-nosnippet>858</a>    };
+<a href=#859 id=859 data-nosnippet>859</a>
+<a href=#860 id=860 data-nosnippet>860</a>    <span class="attr">#[test]
+<a href=#861 id=861 data-nosnippet>861</a>    </span><span class="kw">fn </span>nu_ordering() {
+<a href=#862 id=862 data-nosnippet>862</a>        <span class="kw">for </span>i <span class="kw">in </span><span class="number">1</span>..UPGRADES_IN_ORDER.len() {
+<a href=#863 id=863 data-nosnippet>863</a>            <span class="kw">let </span>nu_a = UPGRADES_IN_ORDER[i - <span class="number">1</span>];
+<a href=#864 id=864 data-nosnippet>864</a>            <span class="kw">let </span>nu_b = UPGRADES_IN_ORDER[i];
+<a href=#865 id=865 data-nosnippet>865</a>            <span class="kw">match </span>(
+<a href=#866 id=866 data-nosnippet>866</a>                MAIN_NETWORK.activation_height(nu_a),
+<a href=#867 id=867 data-nosnippet>867</a>                MAIN_NETWORK.activation_height(nu_b),
+<a href=#868 id=868 data-nosnippet>868</a>            ) {
+<a href=#869 id=869 data-nosnippet>869</a>                (<span class="prelude-val">Some</span>(a), <span class="prelude-val">Some</span>(b)) <span class="kw">if </span>a &lt; b =&gt; (),
+<a href=#870 id=870 data-nosnippet>870</a>                (<span class="prelude-val">Some</span>(<span class="kw">_</span>), <span class="prelude-val">None</span>) =&gt; (),
+<a href=#871 id=871 data-nosnippet>871</a>                (<span class="prelude-val">None</span>, <span class="prelude-val">None</span>) =&gt; (),
+<a href=#872 id=872 data-nosnippet>872</a>                <span class="kw">_ </span>=&gt; <span class="macro">panic!</span>(
+<a href=#873 id=873 data-nosnippet>873</a>                    <span class="string">"{} should not be before {} in UPGRADES_IN_ORDER"</span>,
+<a href=#874 id=874 data-nosnippet>874</a>                    nu_a, nu_b
+<a href=#875 id=875 data-nosnippet>875</a>                ),
+<a href=#876 id=876 data-nosnippet>876</a>            }
+<a href=#877 id=877 data-nosnippet>877</a>        }
+<a href=#878 id=878 data-nosnippet>878</a>    }
+<a href=#879 id=879 data-nosnippet>879</a>
+<a href=#880 id=880 data-nosnippet>880</a>    <span class="attr">#[test]
+<a href=#881 id=881 data-nosnippet>881</a>    </span><span class="kw">fn </span>nu_is_active() {
+<a href=#882 id=882 data-nosnippet>882</a>        <span class="macro">assert!</span>(!MAIN_NETWORK.is_nu_active(NetworkUpgrade::Overwinter, BlockHeight(<span class="number">0</span>)));
+<a href=#883 id=883 data-nosnippet>883</a>        <span class="macro">assert!</span>(!MAIN_NETWORK.is_nu_active(NetworkUpgrade::Overwinter, BlockHeight(<span class="number">347_499</span>)));
+<a href=#884 id=884 data-nosnippet>884</a>        <span class="macro">assert!</span>(MAIN_NETWORK.is_nu_active(NetworkUpgrade::Overwinter, BlockHeight(<span class="number">347_500</span>)));
+<a href=#885 id=885 data-nosnippet>885</a>    }
+<a href=#886 id=886 data-nosnippet>886</a>
+<a href=#887 id=887 data-nosnippet>887</a>    <span class="attr">#[test]
+<a href=#888 id=888 data-nosnippet>888</a>    </span><span class="kw">fn </span>branch_id_from_u32() {
+<a href=#889 id=889 data-nosnippet>889</a>        <span class="macro">assert_eq!</span>(BranchId::try_from(<span class="number">0</span>), <span class="prelude-val">Ok</span>(BranchId::Sprout));
+<a href=#890 id=890 data-nosnippet>890</a>        <span class="macro">assert!</span>(BranchId::try_from(<span class="number">1</span>).is_err());
+<a href=#891 id=891 data-nosnippet>891</a>    }
+<a href=#892 id=892 data-nosnippet>892</a>
+<a href=#893 id=893 data-nosnippet>893</a>    <span class="attr">#[test]
+<a href=#894 id=894 data-nosnippet>894</a>    </span><span class="kw">fn </span>branch_id_for_height() {
 <a href=#895 id=895 data-nosnippet>895</a>        <span class="macro">assert_eq!</span>(
-<a href=#896 id=896 data-nosnippet>896</a>            BranchId::for_height(<span class="kw-2">&amp;</span>MAIN_NETWORK, BlockHeight(<span class="number">419_200</span>)),
-<a href=#897 id=897 data-nosnippet>897</a>            BranchId::Sapling,
+<a href=#896 id=896 data-nosnippet>896</a>            BranchId::for_height(<span class="kw-2">&amp;</span>MAIN_NETWORK, BlockHeight(<span class="number">0</span>)),
+<a href=#897 id=897 data-nosnippet>897</a>            BranchId::Sprout,
 <a href=#898 id=898 data-nosnippet>898</a>        );
 <a href=#899 id=899 data-nosnippet>899</a>        <span class="macro">assert_eq!</span>(
-<a href=#900 id=900 data-nosnippet>900</a>            BranchId::for_height(<span class="kw-2">&amp;</span>MAIN_NETWORK, BlockHeight(<span class="number">903_000</span>)),
-<a href=#901 id=901 data-nosnippet>901</a>            BranchId::Heartwood,
+<a href=#900 id=900 data-nosnippet>900</a>            BranchId::for_height(<span class="kw-2">&amp;</span>MAIN_NETWORK, BlockHeight(<span class="number">419_199</span>)),
+<a href=#901 id=901 data-nosnippet>901</a>            BranchId::Overwinter,
 <a href=#902 id=902 data-nosnippet>902</a>        );
 <a href=#903 id=903 data-nosnippet>903</a>        <span class="macro">assert_eq!</span>(
-<a href=#904 id=904 data-nosnippet>904</a>            BranchId::for_height(<span class="kw-2">&amp;</span>MAIN_NETWORK, BlockHeight(<span class="number">1_046_400</span>)),
-<a href=#905 id=905 data-nosnippet>905</a>            BranchId::Canopy,
+<a href=#904 id=904 data-nosnippet>904</a>            BranchId::for_height(<span class="kw-2">&amp;</span>MAIN_NETWORK, BlockHeight(<span class="number">419_200</span>)),
+<a href=#905 id=905 data-nosnippet>905</a>            BranchId::Sapling,
 <a href=#906 id=906 data-nosnippet>906</a>        );
 <a href=#907 id=907 data-nosnippet>907</a>        <span class="macro">assert_eq!</span>(
-<a href=#908 id=908 data-nosnippet>908</a>            BranchId::for_height(<span class="kw-2">&amp;</span>MAIN_NETWORK, BlockHeight(<span class="number">1_687_104</span>)),
-<a href=#909 id=909 data-nosnippet>909</a>            BranchId::Nu5,
+<a href=#908 id=908 data-nosnippet>908</a>            BranchId::for_height(<span class="kw-2">&amp;</span>MAIN_NETWORK, BlockHeight(<span class="number">903_000</span>)),
+<a href=#909 id=909 data-nosnippet>909</a>            BranchId::Heartwood,
 <a href=#910 id=910 data-nosnippet>910</a>        );
 <a href=#911 id=911 data-nosnippet>911</a>        <span class="macro">assert_eq!</span>(
-<a href=#912 id=912 data-nosnippet>912</a>            BranchId::for_height(<span class="kw-2">&amp;</span>MAIN_NETWORK, BlockHeight(<span class="number">2_726_399</span>)),
-<a href=#913 id=913 data-nosnippet>913</a>            BranchId::Nu5,
+<a href=#912 id=912 data-nosnippet>912</a>            BranchId::for_height(<span class="kw-2">&amp;</span>MAIN_NETWORK, BlockHeight(<span class="number">1_046_400</span>)),
+<a href=#913 id=913 data-nosnippet>913</a>            BranchId::Canopy,
 <a href=#914 id=914 data-nosnippet>914</a>        );
 <a href=#915 id=915 data-nosnippet>915</a>        <span class="macro">assert_eq!</span>(
-<a href=#916 id=916 data-nosnippet>916</a>            BranchId::for_height(<span class="kw-2">&amp;</span>MAIN_NETWORK, BlockHeight(<span class="number">2_726_400</span>)),
-<a href=#917 id=917 data-nosnippet>917</a>            BranchId::Nu6,
+<a href=#916 id=916 data-nosnippet>916</a>            BranchId::for_height(<span class="kw-2">&amp;</span>MAIN_NETWORK, BlockHeight(<span class="number">1_687_104</span>)),
+<a href=#917 id=917 data-nosnippet>917</a>            BranchId::Nu5,
 <a href=#918 id=918 data-nosnippet>918</a>        );
 <a href=#919 id=919 data-nosnippet>919</a>        <span class="macro">assert_eq!</span>(
-<a href=#920 id=920 data-nosnippet>920</a>            BranchId::for_height(<span class="kw-2">&amp;</span>MAIN_NETWORK, BlockHeight(<span class="number">3_146_400</span>)),
-<a href=#921 id=921 data-nosnippet>921</a>            BranchId::Nu6_1,
+<a href=#920 id=920 data-nosnippet>920</a>            BranchId::for_height(<span class="kw-2">&amp;</span>MAIN_NETWORK, BlockHeight(<span class="number">2_726_399</span>)),
+<a href=#921 id=921 data-nosnippet>921</a>            BranchId::Nu5,
 <a href=#922 id=922 data-nosnippet>922</a>        );
 <a href=#923 id=923 data-nosnippet>923</a>        <span class="macro">assert_eq!</span>(
-<a href=#924 id=924 data-nosnippet>924</a>            BranchId::for_height(<span class="kw-2">&amp;</span>MAIN_NETWORK, BlockHeight(<span class="number">5_000_000</span>)),
-<a href=#925 id=925 data-nosnippet>925</a>            BranchId::Nu6_1,
+<a href=#924 id=924 data-nosnippet>924</a>            BranchId::for_height(<span class="kw-2">&amp;</span>MAIN_NETWORK, BlockHeight(<span class="number">2_726_400</span>)),
+<a href=#925 id=925 data-nosnippet>925</a>            BranchId::Nu6,
 <a href=#926 id=926 data-nosnippet>926</a>        );
-<a href=#927 id=927 data-nosnippet>927</a>    }
-<a href=#928 id=928 data-nosnippet>928</a>}
+<a href=#927 id=927 data-nosnippet>927</a>        <span class="macro">assert_eq!</span>(
+<a href=#928 id=928 data-nosnippet>928</a>            BranchId::for_height(<span class="kw-2">&amp;</span>MAIN_NETWORK, BlockHeight(<span class="number">3_146_400</span>)),
+<a href=#929 id=929 data-nosnippet>929</a>            BranchId::Nu6_1,
+<a href=#930 id=930 data-nosnippet>930</a>        );
+<a href=#931 id=931 data-nosnippet>931</a>        <span class="macro">assert_eq!</span>(
+<a href=#932 id=932 data-nosnippet>932</a>            BranchId::for_height(<span class="kw-2">&amp;</span>MAIN_NETWORK, BlockHeight(<span class="number">5_000_000</span>)),
+<a href=#933 id=933 data-nosnippet>933</a>            BranchId::Nu6_1,
+<a href=#934 id=934 data-nosnippet>934</a>        );
+<a href=#935 id=935 data-nosnippet>935</a>    }
+<a href=#936 id=936 data-nosnippet>936</a>}
 </code></pre></div></section></main></body></html>

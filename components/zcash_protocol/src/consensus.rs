@@ -467,7 +467,7 @@ impl Parameters for TestNetwork {
             NetworkUpgrade::Nu6 => Some(BlockHeight(2_976_000)),
             NetworkUpgrade::Nu6_1 => Some(BlockHeight(3_536_500)),
             #[cfg(zcash_unstable = "nu7")]
-            NetworkUpgrade::Nu7 => None,
+            NetworkUpgrade::Nu7 => Some(BlockHeight(3_815_600)),
             #[cfg(zcash_unstable = "zfuture")]
             NetworkUpgrade::ZFuture => None,
         }
@@ -677,7 +677,7 @@ impl TryFrom<u32> for BranchId {
             0xc8e7_1055 => Ok(BranchId::Nu6),
             0x4dec_4df0 => Ok(BranchId::Nu6_1),
             #[cfg(zcash_unstable = "nu7")]
-            0xffff_ffff => Ok(BranchId::Nu7),
+            0x0000_beef => Ok(BranchId::Nu7),
             #[cfg(zcash_unstable = "zfuture")]
             0xffff_ffff => Ok(BranchId::ZFuture),
             _ => Err("Unknown consensus branch ID"),
@@ -698,7 +698,7 @@ impl From<BranchId> for u32 {
             BranchId::Nu6 => 0xc8e7_1055,
             BranchId::Nu6_1 => 0x4dec_4df0,
             #[cfg(zcash_unstable = "nu7")]
-            BranchId::Nu7 => 0xffff_ffff,
+            BranchId::Nu7 => 0x0000_beef,
             #[cfg(zcash_unstable = "zfuture")]
             BranchId::ZFuture => 0xffff_ffff,
         }
@@ -770,8 +770,14 @@ impl BranchId {
             BranchId::Nu6 => params
                 .activation_height(NetworkUpgrade::Nu6)
                 .map(|lower| (lower, params.activation_height(NetworkUpgrade::Nu6_1))),
+                
             BranchId::Nu6_1 => params
                 .activation_height(NetworkUpgrade::Nu6_1)
+                .map(|lower| (lower, params.activation_height(NetworkUpgrade::Nu7))),
+                
+                #[cfg(zcash_unstable = "nu7")]
+            BranchId::Nu7 => params
+                .activation_height(NetworkUpgrade::Nu7)
                 .map(|lower| {
                     #[cfg(zcash_unstable = "nu7")]
                     let upper = params.activation_height(NetworkUpgrade::Nu7);
@@ -781,10 +787,8 @@ impl BranchId {
                     let upper = None;
                     (lower, upper)
                 }),
-            #[cfg(zcash_unstable = "nu7")]
-            BranchId::Nu7 => params
-                .activation_height(NetworkUpgrade::Nu7)
-                .map(|lower| (lower, None)),
+            
+         
             #[cfg(zcash_unstable = "zfuture")]
             BranchId::ZFuture => params
                 .activation_height(NetworkUpgrade::ZFuture)
